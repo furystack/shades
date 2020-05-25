@@ -1,0 +1,22 @@
+{
+  "name": "@furystack/shades-nipple",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "build": "tsc --b",
+    "clean": "rimraf dist",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^3.7.2"
+  },
+  "dependencies": {
+    "@furystack/shades": "^3.0.0",
+    "nipplejs": "^0.8.5"
+  },
+  "typings": "dist/index.d.ts",
+  "main": "dist/index.js"
+}

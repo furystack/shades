@@ -7,6 +7,9 @@
     },
     {
       "path": "./shades-common-components"
+    },
+    {
+      "path": "./shades-nipple"
     }
   ]
 }
