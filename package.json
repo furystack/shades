@@ -1,0 +1,61 @@
+{
+  "private": true,
+  "version": "1.0.0-2019-06-10",
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": []
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.29.0",
+    "@typescript-eslint/parser": "^2.29.0",
+    "eslint": "^7.0.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-jsdoc": "^25.4.2",
+    "eslint-plugin-prettier": "^3.1.3",
+    "got": "^11.0.2",
+    "husky": "^4.2.5",
+    "jest": "^26.0.0",
+    "jest-junit": "^10.0.0",
+    "lerna": "^3.20.2",
+    "lint-staged": "^10.1.7",
+    "prettier": "^2.0.5",
+    "rimraf": "^3.0.2",
+    "tslib": "^2.0.0",
+    "typescript": "^3.8.3"
+  },
+  "scripts": {
+    "bootstrap": "lerna bootstrap",
+    "build": "tsc -b packages",
+    "lint": "eslint . --ext .tsx --ext .ts",
+    "prettier": "prettier --write",
+    "clean": "yarn rimraf ./packages/**/dist && yarn rimraf ./packages/**/tsconfig.tsbuildinfo",
+    "test": "jest --verbose",
+    "test:debug": "jest --verbose"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write",
+      "git add"
+    ],
+    "*.{js,jsx}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "name": "furystack",
+  "jest-junit": {
+    "suiteName": "FuryStack Jest tests",
+    "outputDirectory": "./coverage"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  }
+}
