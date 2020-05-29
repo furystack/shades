@@ -1,0 +1,92 @@
+import { Shade, createComponent } from '@furystack/shades'
+import { promisifyAnimation } from '../../utils/promisify-animation'
+import { SuggestionResult } from './command-provider'
+import { CommandPaletteManager } from './command-palette-manager'
+
+export const SuggestionList = Shade<{ manager: CommandPaletteManager }, { suggestions: SuggestionResult[] }>({
+  shadowDomName: 'shade-command-palette-suggestion-list',
+  getInitialState: ({ props }) => ({
+    suggestions: props.manager.currentSuggestions.getValue(),
+  }),
+  constructed: ({ updateState, element, props }) => {
+    const { manager } = props
+    const subscriptions = [
+      manager.currentSuggestions.subscribe((suggestions) => {
+        updateState({ suggestions })
+      }),
+      manager.isOpened.subscribe(async (isOpened) => {
+        const container = element.firstElementChild as HTMLDivElement
+        if (isOpened) {
+          container.style.zIndex = '1'
+          container.style.width = `calc(${Math.round(
+            element.parentElement?.getBoundingClientRect().width || 200,
+          )}px - 3em)`
+          await promisifyAnimation(
+            container,
+            [
+              { opacity: 0, transform: 'translate(0, -50px) rotateX(60deg)' },
+              { opacity: 1, transform: 'translate(0, 0) rotateX(0deg)' },
+            ],
+            { fill: 'forwards', duration: 500 },
+          )
+        } else {
+          await promisifyAnimation(
+            container,
+            [
+              { opacity: 1, transform: 'translate(0, 0) rotateX(0deg)' },
+              { opacity: 0, transform: 'translate(0, -50px) rotateX(60deg)' },
+            ],
+            { fill: 'forwards', duration: 200 },
+          )
+          container.style.zIndex = '-1'
+        }
+      }),
+      manager.selectedIndex.subscribe((idx) => {
+        ;[...element.querySelectorAll('.suggestion-item')].map((s, i) => {
+          if (i === idx) {
+            ;(s as HTMLDivElement).style.background = 'rgba(128,128,128,0.2)'
+          } else {
+            ;(s as HTMLDivElement).style.background = 'rgba(96,96,96,0.2)'
+          }
+        })
+      }),
+    ]
+    return () => subscriptions.map((s) => s.dispose())
+  },
+  render: ({ element, injector, getState, props }) => {
+    const { manager } = props
+    return (
+      <div
+        className="suggestion-items-container"
+        style={{
+          borderTop: 'none',
+          position: 'absolute',
+          opacity: manager.isOpened.getValue() ? '1' : '0',
+          borderRadius: '0px 0px 5px 5px',
+          marginLeft: '14px',
+          overflow: 'hidden',
+          zIndex: '1',
+          left: 'auto',
+          backgroundColor: 'rgba(8,8,8,0.85)',
+          boxShadow: '3px 3px 5px rgba(0,0,0,0.3)',
+          backdropFilter: 'blur(15px)',
+          width: `calc(${Math.round(element.parentElement?.getBoundingClientRect().width || 200)}px - 3em)`,
+        }}>
+        {getState().suggestions.map((s, i) => (
+          <div
+            className="suggestion-item"
+            onclick={() => {
+              manager.isOpened.getValue() && manager.selectSuggestion(injector, i)
+            }}
+            style={{
+              padding: '1em',
+              cursor: 'default',
+              background: i === manager.selectedIndex.getValue() ? 'rgba(128,128,128,0.2)' : 'rgba(96,96,96,0.2)',
+            }}>
+            {s.element}
+          </div>
+        ))}
+      </div>
+    )
+  },
+})
