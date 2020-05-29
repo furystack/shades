@@ -19,6 +19,7 @@ export interface RouterProps {
 
 export interface RouterState {
   activeRoute?: Route<any>
+  activeRouteParams?: any
   jsx?: JSX.Element
 }
 export const Router = Shade<RouterProps, RouterState>({
@@ -26,16 +27,20 @@ export const Router = Shade<RouterProps, RouterState>({
   getInitialState: () => ({}),
   constructed: ({ children, props, injector, updateState, getState, element }) => {
     const subscription = injector.getInstance(LocationService).onLocationChanged.subscribe(async (currentUrl) => {
-      const lastRoute = getState().activeRoute
+      const { activeRoute: lastRoute, activeRouteParams: lastParams } = getState()
       for (const route of props.routes) {
         const matchFn = match(route.url, route.routingOptions)
         const matchResult = matchFn(currentUrl.pathname)
         if (matchResult) {
-          if (route !== lastRoute) {
+          if (route !== lastRoute || JSON.stringify(lastParams) !== JSON.stringify(matchResult.params)) {
             if (lastRoute?.onLeave) {
               await lastRoute.onLeave({ children, props, injector, updateState, getState, element })
             }
-            updateState({ jsx: route.component({ currentUrl, match: matchResult }), activeRoute: route })
+            updateState({
+              jsx: route.component({ currentUrl, match: matchResult }),
+              activeRoute: route,
+              activeRouteParams: matchResult.params,
+            })
             if (route.onVisit) {
               await route.onVisit({ children, props, injector, updateState, getState, element })
             }
