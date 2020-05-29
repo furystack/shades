@@ -6,6 +6,11 @@ import { CommandPaletteInput } from './command-palette-input'
 import { SuggestionList } from './command-palette-suggestion-list'
 import { CommandProvider } from './command-provider'
 
+export * from './command-palette-input'
+export * from './command-palette-manager'
+export * from './command-palette-suggestion-list'
+export * from './command-provider'
+
 export interface CommandPaletteProps {
   commandProviders: CommandProvider[]
   defaultPrefix: string
