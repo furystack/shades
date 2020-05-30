@@ -135,7 +135,7 @@ export const Shade = <TProps, TState = unknown>(o: ShadeOptions<TProps, TState>)
             cleanupResult.then((cleanup) => (this.cleanup = cleanup))
           } else {
             // construct is not async
-            // this.cleanup = this.cleanup
+            this.cleanup = cleanupResult
           }
         }
 
