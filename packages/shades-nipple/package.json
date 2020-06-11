@@ -1,6 +1,6 @@
 {
   "name": "@furystack/shades-nipple",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "",
   "scripts": {
     "build": "tsc --b",
@@ -16,7 +16,7 @@
     "typescript": "^3.9.5"
   },
   "dependencies": {
-    "@furystack/shades": "^3.2.14",
+    "@furystack/shades": "^3.2.15",
     "nipplejs": "^0.8.5"
   },
   "typings": "dist/index.d.ts",
