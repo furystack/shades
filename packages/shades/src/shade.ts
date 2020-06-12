@@ -91,7 +91,7 @@ export const Shade = <TProps, TState = unknown>(o: ShadeOptions<TProps, TState>)
          * @returns values for the current render options
          */
         private getRenderOptions = () => {
-          const props = this.props.getValue()
+          const props = this.props.getValue() || {}
           const getState = () => this.state.getValue()
           return ({
             props,
