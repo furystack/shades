@@ -2,7 +2,7 @@ import { Shade } from '../shade'
 
 export interface LazyLoadProps {
   loader: JSX.Element
-  error?: (error: Error) => JSX.Element
+  error?: (error: Error, retry: () => void) => JSX.Element
   component: () => Promise<JSX.Element>
 }
 
@@ -26,10 +26,18 @@ export const LazyLoad = Shade<LazyLoadProps, LazyLoadState>({
       }
     }
   },
-  render: ({ props, getState }) => {
+  render: ({ props, getState, updateState }) => {
     const currentState = getState()
     if (currentState.error && props.error) {
-      return props.error(currentState.error)
+      return props.error(currentState.error, async () => {
+        try {
+          updateState({ error: undefined, component: undefined })
+          const loaded = await props.component()
+          updateState({ component: loaded })
+        } catch (error) {
+          updateState({ error })
+        }
+      })
     }
     if (currentState.component) {
       return currentState.component
