@@ -129,7 +129,7 @@ export const CommandPalette = Shade<CommandPaletteProps, CommandPaletteState>({
               textShadow: '0 0 1px #aaa',
             }}
             onclick={() => manager.isOpened.setValue(true)}>
-            {'>'}
+            {props.defaultPrefix}
           </div>
           <CommandPaletteInput manager={manager} />
           <div
