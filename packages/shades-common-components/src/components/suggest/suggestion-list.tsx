@@ -1,21 +1,21 @@
-import { Shade, createComponent } from '@furystack/shades'
+import { Shade, createComponent, ChildrenList } from '@furystack/shades'
 import { promisifyAnimation } from '../../utils/promisify-animation'
-import { CommandPaletteSuggestionResult } from './command-provider'
-import { CommandPaletteManager } from './command-palette-manager'
+import { SuggestionResult } from './suggestion-result'
+import { SuggestManager } from './suggest-manager'
 
-export const CommandPaletteSuggestionList = Shade<
-  { manager: CommandPaletteManager },
-  { suggestions: CommandPaletteSuggestionResult[] }
->({
-  shadowDomName: 'shade-command-palette-suggestion-list',
+export const SuggestionList: <T>(
+  props: { manager: SuggestManager<T> },
+  children: ChildrenList,
+) => JSX.Element<any, any> = Shade<{ manager: SuggestManager<any> }, { suggestions: SuggestionResult[] }>({
+  shadowDomName: 'shade-suggest-suggestion-list',
   getInitialState: ({ props }) => ({
-    suggestions: props.manager.currentSuggestions.getValue(),
+    suggestions: props.manager.currentSuggestions.getValue().map((v) => v.suggestion),
   }),
   constructed: ({ updateState, element, props }) => {
     const { manager } = props
     const subscriptions = [
-      manager.currentSuggestions.subscribe((suggestions) => {
-        updateState({ suggestions })
+      manager.currentSuggestions.subscribe((s) => {
+        updateState({ suggestions: s.map((ss) => ss.suggestion) })
       }),
       manager.isOpened.subscribe(async (isOpened) => {
         const container = element.firstElementChild as HTMLDivElement
@@ -56,7 +56,7 @@ export const CommandPaletteSuggestionList = Shade<
     ]
     return () => subscriptions.map((s) => s.dispose())
   },
-  render: ({ element, injector, getState, props }) => {
+  render: ({ element, getState, props }) => {
     const { manager } = props
     return (
       <div
@@ -79,7 +79,7 @@ export const CommandPaletteSuggestionList = Shade<
           <div
             className="suggestion-item"
             onclick={() => {
-              manager.isOpened.getValue() && manager.selectSuggestion(injector, i)
+              manager.isOpened.getValue() && manager.selectSuggestion(i)
             }}
             style={{
               padding: '1em',

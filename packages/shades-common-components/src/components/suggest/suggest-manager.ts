@@ -1,20 +1,17 @@
 import { Injector, Injectable } from '@furystack/inject'
 import { debounce, ObservableValue } from '@furystack/utils'
-import { CommandProvider, CommandPaletteSuggestionResult } from './command-provider'
+import { SuggestionResult } from './suggestion-result'
 
 @Injectable({ lifetime: 'singleton' })
-export class CommandPaletteManager {
+export class SuggestManager<T> {
   public isOpened = new ObservableValue(false)
   public isLoading = new ObservableValue(false)
   public term = new ObservableValue('')
   public selectedIndex = new ObservableValue(0)
-  public currentSuggestions = new ObservableValue<CommandPaletteSuggestionResult[]>([])
+  public currentSuggestions = new ObservableValue<Array<{ entry: T; suggestion: SuggestionResult }>>([])
+  public onSelectSuggestion = new ObservableValue<T>()
 
   public keyPressListener = ((ev: KeyboardEvent) => {
-    if (ev.key && ev.key.toLowerCase() === 'p' && ev.ctrlKey) {
-      this.isOpened.setValue(true)
-      this.currentSuggestions.setValue([])
-    }
     if (ev.key === 'Escape') {
       this.isOpened.setValue(false)
     }
@@ -36,10 +33,10 @@ export class CommandPaletteManager {
     window.removeEventListener('click', this.clickOutsideListener)
   }
 
-  public selectSuggestion(injector: Injector, index: number = this.selectedIndex.getValue()) {
+  public selectSuggestion(index: number = this.selectedIndex.getValue()) {
     const selectedSuggestion = this.currentSuggestions.getValue()[index]
     this.isOpened.setValue(false)
-    selectedSuggestion.onSelected({ injector })
+    this.onSelectSuggestion.setValue(selectedSuggestion.entry)
   }
 
   private lastGetSuggestionOptions?: { injector: Injector; term: string }
@@ -52,20 +49,18 @@ export class CommandPaletteManager {
       this.lastGetSuggestionOptions = options
       this.currentSuggestions.setValue([])
       this.selectedIndex.setValue(0)
-      await Promise.all(
-        this.commandProviders.map(async (cp) => {
-          const value = await cp(options)
-          if (this.lastGetSuggestionOptions === options) {
-            this.currentSuggestions.setValue([...this.currentSuggestions.getValue(), ...value].sortBy('score'))
-          }
-        }),
-      )
+      const newEntries = await this.getEntries(options.term)
+      this.isOpened.setValue(true)
+      this.currentSuggestions.setValue(newEntries.map((e) => ({ entry: e, suggestion: this.getSuggestionEntry(e) })))
     } finally {
       this.isLoading.setValue(false)
     }
   }, 250)
 
-  constructor(private readonly commandProviders: CommandProvider[]) {
+  constructor(
+    private readonly getEntries: (term: string) => Promise<T[]>,
+    private readonly getSuggestionEntry: (entry: T) => SuggestionResult,
+  ) {
     window.addEventListener('keyup', this.keyPressListener, true)
     window.addEventListener('click', this.clickOutsideListener, true)
   }

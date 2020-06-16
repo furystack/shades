@@ -1,32 +1,37 @@
-import { Shade, createComponent, PartialElement } from '@furystack/shades'
+import { Shade, createComponent, PartialElement, ChildrenList } from '@furystack/shades'
 import { promisifyAnimation } from '../../utils/promisify-animation'
 import { Loader } from '../loader'
-import { CommandPaletteManager } from './command-palette-manager'
-import { CommandPaletteInput } from './command-palette-input'
-import { CommandPaletteSuggestionList } from './command-palette-suggestion-list'
-import { CommandProvider } from './command-provider'
+import { SuggestManager } from './suggest-manager'
+import { SuggestionResult } from './suggestion-result'
+import { SuggestInput } from './suggest-input'
+import { SuggestionList } from './suggestion-list'
 
-export * from './command-palette-input'
-export * from './command-palette-manager'
-export * from './command-palette-suggestion-list'
-export * from './command-provider'
+export * from './suggest-input'
+export * from './suggest-manager'
+export * from './suggestion-list'
+export * from './suggestion-result'
 
-export interface CommandPaletteProps {
-  commandProviders: CommandProvider[]
+export interface SuggestProps<T> {
   defaultPrefix: string
+  getEntries: (term: string) => Promise<T[]>
+  getSuggestionEntry: (entry: T) => SuggestionResult
+  onSelectSuggestion: (entry: T) => void
   style?: PartialElement<CSSStyleDeclaration>
 }
 
-export interface CommandPaletteState {
-  manager: CommandPaletteManager
+export interface SuggestState<T> {
+  manager: SuggestManager<T>
 }
 
-export const CommandPalette = Shade<CommandPaletteProps, CommandPaletteState>({
-  shadowDomName: 'shade-command-palette',
+export const Suggest: <T>(props: SuggestProps<T>, children: ChildrenList) => JSX.Element<any, any> = Shade<
+  SuggestProps<any>,
+  SuggestState<any>
+>({
+  shadowDomName: 'shade-suggest',
   getInitialState: ({ props }) => ({
-    manager: new CommandPaletteManager(props.commandProviders),
+    manager: new SuggestManager(props.getEntries, props.getSuggestionEntry),
   }),
-  constructed: ({ element: el, getState }) => {
+  constructed: ({ element: el, getState, props }) => {
     const { manager } = getState()
     const element = el.querySelector('.input-container') as HTMLDivElement
     manager.element = el
@@ -82,6 +87,7 @@ export const CommandPalette = Shade<CommandPaletteProps, CommandPaletteState>({
         })
       }
     })
+    manager.onSelectSuggestion.subscribe((value) => props.onSelectSuggestion(value))
     return () => manager.dispose()
   },
   render: ({ props, injector, element, getState }) => {
@@ -93,7 +99,7 @@ export const CommandPalette = Shade<CommandPaletteProps, CommandPaletteState>({
         onkeyup={(ev) => {
           if (ev.key === 'Enter') {
             ev.preventDefault()
-            manager.selectSuggestion(injector)
+            manager.selectSuggestion()
             return
           }
           if (ev.key === 'ArrowUp') {
@@ -118,6 +124,7 @@ export const CommandPalette = Shade<CommandPaletteProps, CommandPaletteState>({
             padding: '0 1em',
             borderRadius: '5px',
             position: 'relative',
+            background: 'rgba(128,128,128,0.1)',
             ...props.style,
           }}>
           <div
@@ -131,7 +138,7 @@ export const CommandPalette = Shade<CommandPaletteProps, CommandPaletteState>({
             onclick={() => manager.isOpened.setValue(true)}>
             {props.defaultPrefix}
           </div>
-          <CommandPaletteInput manager={manager} />
+          <SuggestInput manager={manager} />
           <div
             className="post-controls"
             style={{
@@ -162,7 +169,7 @@ export const CommandPalette = Shade<CommandPaletteProps, CommandPaletteState>({
             </div>
           </div>
         </div>
-        <CommandPaletteSuggestionList manager={manager} />
+        <SuggestionList manager={manager} />
       </div>
     )
   },
