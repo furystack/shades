@@ -346,7 +346,7 @@
     unique-filename "^1.1.1"
     which "^1.3.1"
 
-"@furystack/core@^9.1.3":
+"@furystack/core@^9.1.4":
   version "9.1.4"
   resolved "https://registry.yarnpkg.com/@furystack/core/-/core-9.1.4.tgz#fdf319d3f539506e0c6230e615cbb8e6fe752c0a"
   integrity sha512-velx1unBgnpYF+aNQYcDhERAowytdWHloIdt/QH+tWO76IDUI0CcidwlfIEhcxaA56W/GWV640DAANc65p36kA==
@@ -357,7 +357,7 @@
     semaphore-async-await "^1.5.1"
     tslib "^2.0.0"
 
-"@furystack/inject@^4.0.32", "@furystack/inject@^4.0.33":
+"@furystack/inject@^4.0.33":
   version "4.0.33"
   resolved "https://registry.yarnpkg.com/@furystack/inject/-/inject-4.0.33.tgz#4f712bfceb2e567c7feca8c5209a8e40ec2cb4ee"
   integrity sha512-+1MltLqkPWWh8BS6hbbYTlQNQb8kUvNdf4yby8zwj2uGubyfYDdF1FyHrxThDZbaCwBVxllQ+ejhblUZ2UeWsA==
@@ -365,7 +365,7 @@
     "@furystack/utils" "^1.2.3"
     tslib "^2.0.0"
 
-"@furystack/logging@^2.0.39", "@furystack/logging@^2.0.40":
+"@furystack/logging@^2.0.40":
   version "2.0.40"
   resolved "https://registry.yarnpkg.com/@furystack/logging/-/logging-2.0.40.tgz#8b3952aeac11eaf6facea797d63f81f2df218ef1"
   integrity sha512-/RyDGpgLeWv/MypD9iEDPlUPqyGhBkuvUZhlGEuA7ahA1tVS2+3SvWbiX38LTA8nEMobcZWfPiDZFr3v2KVyFg==
@@ -374,7 +374,7 @@
     "@furystack/utils" "^1.2.3"
     tslib "^2.0.0"
 
-"@furystack/utils@^1.2.2", "@furystack/utils@^1.2.3":
+"@furystack/utils@^1.2.3":
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/@furystack/utils/-/utils-1.2.3.tgz#3cb57003d5c0f1ebc2da85cd90deeb7cb6ae2571"
   integrity sha512-Ei0sVPvJjZGxTJ6UOTBvDxsr1Hdy5T3oI1FDZnFBm0DANaP0Or3XKsEt/rDZgOegBHGfcJNyFJBFa9J9lFYyPA==
@@ -1505,7 +1505,7 @@
     "@types/istanbul-lib-coverage" "*"
     "@types/istanbul-lib-report" "*"
 
-"@types/jest@^26.0.0":
+"@types/jest@^26.0.2":
   version "26.0.2"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-26.0.2.tgz#536dbf34e8dcb41ba4f5b3eeb2cad4e6d28a39d9"
   integrity sha512-rJB5DZm6q6kILGvQVxMRXOteoMjvA10UlGDf7+hM6pcMiWQiTgxaPXKC+kYCTAdBe9y33O+n3WZ8dzvBKOTSmA==
@@ -1589,7 +1589,7 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@typescript-eslint/eslint-plugin@^3.3.0":
+"@typescript-eslint/eslint-plugin@^3.4.0":
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-3.4.0.tgz#8378062e6be8a1d049259bdbcf27ce5dfbeee62b"
   integrity sha512-wfkpiqaEVhZIuQRmudDszc01jC/YR7gMSxa6ulhggAe/Hs0KVIuo9wzvFiDbG3JD5pRFQoqnf4m7REDsUvBnMQ==
@@ -1611,7 +1611,7 @@
     eslint-scope "^5.0.0"
     eslint-utils "^2.0.0"
 
-"@typescript-eslint/parser@^3.3.0":
+"@typescript-eslint/parser@^3.4.0":
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/parser/-/parser-3.4.0.tgz#fe52b68c5cb3bba3f5d875bd17adb70420d49d8d"
   integrity sha512-ZUGI/de44L5x87uX5zM14UYcbn79HSXUR+kzcqU42gH0AgpdB/TjuJy3m4ezI7Q/jk3wTQd755mxSDLhQP79KA==
@@ -3088,7 +3088,7 @@ eslint-visitor-keys@^1.1.0, eslint-visitor-keys@^1.2.0:
   resolved "https://registry.yarnpkg.com/eslint-visitor-keys/-/eslint-visitor-keys-1.3.0.tgz#30ebd1ef7c2fdff01c3a4f151044af25fab0523e"
   integrity sha512-6J72N8UNa462wa/KFODt/PJ3IU60SDpC3QXC1Hjc1BXXpfL2C9R5+AU7jhe0F6GREqVMh4Juu+NY7xn+6dipUQ==
 
-eslint@^7.2.0:
+eslint@^7.3.1:
   version "7.3.1"
   resolved "https://registry.yarnpkg.com/eslint/-/eslint-7.3.1.tgz#76392bd7e44468d046149ba128d1566c59acbe19"
   integrity sha512-cQC/xj9bhWUcyi/RuMbRtC3I0eW8MH0jhRELSvpKYkWep3C6YZ2OkvcvJVUeO6gcunABmzptbXBuDoXsjHmfTA==
@@ -4757,7 +4757,7 @@ jest-worker@^26.1.0:
     merge-stream "^2.0.0"
     supports-color "^7.0.0"
 
-jest@^26.0.0:
+jest@^26.1.0:
   version "26.1.0"
   resolved "https://registry.yarnpkg.com/jest/-/jest-26.1.0.tgz#2f3aa7bcffb9bfd025473f83bbbf46a3af026263"
   integrity sha512-LIti8jppw5BcQvmNJe4w2g1N/3V68HUfAv9zDVm7v+VAtQulGhH0LnmmiVkbNE4M4I43Bj2fXPiBGKt26k9tHw==
@@ -4971,7 +4971,7 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.1.6.tgz#1c00c743b433cd0a4e80758f7b64a57440d9ff00"
   integrity sha1-HADHQ7QzzQpOgHWPe2SldEDZ/wA=
 
-lint-staged@^10.2.10:
+lint-staged@^10.2.11:
   version "10.2.11"
   resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-10.2.11.tgz#713c80877f2dc8b609b05bc59020234e766c9720"
   integrity sha512-LRRrSogzbixYaZItE2APaS4l2eJMjjf5MbclRZpLJtcQJShcvUzKXsNeZgsLIZ0H0+fg2tL4B59fU9wHIHtFIA==
@@ -7704,7 +7704,7 @@ uuid@^7.0.3:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-7.0.3.tgz#c5c9f2c8cf25dc0a372c4df1441c41f5bd0c680b"
   integrity sha512-DPSke0pXhTZgoF/d+WSt2QaKMCFSfx7QegxEWT+JOuHF5aWrKEn0G+ztjuJg/gG8/ItK+rbPCD/yNv8yyih6Cg==
 
-uuid@^8.0.0, uuid@^8.1.0:
+uuid@^8.2.0:
   version "8.2.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.2.0.tgz#cb10dd6b118e2dada7d0cd9730ba7417c93d920e"
   integrity sha512-CYpGiFTUrmI6OBMkAdjSDM0k5h8SkkiTP4WAjQgDgNB1S3Ou9VBEvr6q0Kv2H1mMk7IWfxYGpMH5sd5AvcIV2Q==
