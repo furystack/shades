@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/furystack/furystack",
   "devDependencies": {
-    "@types/jest": "^26.0.2",
+    "@types/jest": "^26.0.3",
     "@types/uuid": "^8.0.0"
   },
   "dependencies": {
