@@ -1,6 +1,6 @@
 {
   "name": "@furystack/shades-common-components",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "",
   "scripts": {
     "build": "tsc --b",
@@ -16,7 +16,7 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
-    "@furystack/shades": "^3.2.19",
+    "@furystack/shades": "^3.2.20",
     "uuid": "^8.3.0"
   },
   "typings": "dist/index.d.ts",
