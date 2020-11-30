@@ -1,4 +1,4 @@
-import { ChildrenList, ShadeComponent, isShadeComponent } from './models'
+import { ChildrenList, ShadeComponent, isShadeComponent, PartialElement } from './models'
 
 /**
  * Appends a list of items to a HTML element
@@ -20,6 +20,23 @@ export const appendChild = (el: HTMLElement, children: ChildrenList) => {
   }
 }
 
+export const hasStyle = (props: any): props is { style: PartialElement<CSSStyleDeclaration> } => {
+  return props?.style !== undefined
+}
+
+/**
+ * @param el The Target HTML Element
+ * @param props The Properties to fetch The Styles Object
+ */
+export const attachStyles = (el: HTMLElement, props: any) => {
+  if (hasStyle(props))
+    for (const key in props.style) {
+      if (Object.prototype.hasOwnProperty.call(props.style, key)) {
+        ;(el.style as any)[key] = props.style[key]
+      }
+    }
+}
+
 /**
  * Factory method that creates a component. This should be configured as a default JSX Factory in tsconfig.
  *
@@ -33,22 +50,20 @@ export const createComponent = <TProps>(
   props: TProps,
   ...children: ChildrenList
 ) => {
-  let el!: HTMLElement | JSX.Element
   if (typeof elementType === 'string') {
-    el = document.createElement(elementType)
+    const el = document.createElement(elementType)
     Object.assign(el, props)
 
     if (props && (props as any).style) {
-      const style = (props as any).style as CSSStyleDeclaration
-      for (const styleName of Object.keys(style) as any) {
-        el.style[styleName as any] = style[styleName]
-      }
+      attachStyles(el, props)
     }
     if (children) {
       appendChild(el, children)
     }
+    return el
   } else if (isShadeComponent(elementType)) {
-    el = (elementType as ShadeComponent<TProps>)(props, children)
+    const el = (elementType as ShadeComponent<TProps>)(props, children)
+    attachStyles(el, props)
+    return el
   }
-  return el
 }

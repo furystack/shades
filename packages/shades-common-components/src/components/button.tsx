@@ -1,50 +1,113 @@
 import { Shade, createComponent, PartialElement } from '@furystack/shades'
 import { promisifyAnimation } from '../utils/promisify-animation'
-import { colors } from './styles'
+import { Palette, Theme, ThemeProviderService } from '../services/theme-provider-service'
 
-const getDefaultStyle: (props: ButtonProps) => PartialElement<CSSStyleDeclaration> = (props) => ({
-  background: props.variant
-    ? props.variant === 'primary'
-      ? colors.primary.main
-      : colors.secondary.main
-    : 'rgb(128, 128, 128)',
-  border: '1px solid rgba(0, 0, 0, 0.3)',
-  padding: '12px 20px',
-  transition: 'background .41s linear',
-  borderRadius: '3px',
-  fontWeight: 'bolder',
-  fontVariant: 'all-petite-caps',
-  color: props.variant
-    ? props.variant === 'primary'
-      ? colors.primary.contrastText
-      : colors.secondary.contrastText
-    : '#333',
-})
-
-const getHoverStyle: (props: ButtonProps) => PartialElement<CSSStyleDeclaration> = (props) => ({
-  background: props.variant
-    ? props.variant === 'primary'
-      ? colors.primary.light
-      : colors.secondary.light
-    : 'rgb(156,156,156)',
-})
-
-export interface ButtonProps {
-  variant?: 'primary' | 'secondary'
+export type ButtonProps = PartialElement<HTMLButtonElement> & {
+  variant?: 'contained' | 'outlined'
+  color?: keyof Palette
 }
 
-export const Button = Shade<PartialElement<HTMLButtonElement> & ButtonProps>({
+const getBackground = (buttonProps: ButtonProps, theme: Theme) =>
+  buttonProps.variant === 'contained'
+    ? buttonProps.color
+      ? buttonProps.disabled
+        ? theme.palette[buttonProps.color].dark
+        : theme.palette[buttonProps.color].main
+      : buttonProps.disabled
+      ? theme.button.disabledBackground
+      : theme.text.primary
+    : 'rgba(0,0,0,0)'
+
+const getHoveredBackground = (buttonProps: ButtonProps, theme: Theme, fallback: () => string) =>
+  buttonProps.variant === 'contained'
+    ? buttonProps.color
+      ? theme.palette[buttonProps.color].dark
+      : buttonProps.disabled
+      ? theme.button.disabledBackground
+      : theme.text.secondary
+    : fallback()
+
+const getBorder = (buttonProps: ButtonProps, theme: Theme) =>
+  buttonProps.variant === 'outlined'
+    ? buttonProps.color
+      ? `1px solid ${
+          buttonProps.disabled ? theme.palette[buttonProps.color].dark : theme.palette[buttonProps.color].main
+        }`
+      : `1px solid ${buttonProps.disabled ? theme.button.disabledBackground : theme.text.secondary}`
+    : 'none'
+
+const getHoveredBorder = (buttonProps: ButtonProps, theme: Theme) =>
+  buttonProps.variant === 'outlined'
+    ? buttonProps.color
+      ? `1px solid ${buttonProps.disabled ? theme.button.disabledBackground : theme.palette[buttonProps.color].light}`
+      : `1px solid ${buttonProps.disabled ? theme.button.disabledBackground : theme.text.primary}`
+    : 'none'
+
+const getTextColor = (buttonProps: ButtonProps, theme: Theme, fallback: () => string) =>
+  !buttonProps.variant
+    ? buttonProps.color
+      ? buttonProps.disabled
+        ? theme.palette[buttonProps.color].dark
+        : theme.palette[buttonProps.color].main
+      : theme.text.secondary
+    : fallback()
+
+const getHoveredTextColor = (buttonProps: ButtonProps, theme: Theme, fallback: () => string) =>
+  !buttonProps.variant
+    ? buttonProps.color
+      ? buttonProps.disabled
+        ? theme.palette[buttonProps.color].dark
+        : theme.palette[buttonProps.color].light
+      : theme.text.primary
+    : fallback()
+
+export const Button = Shade<ButtonProps, { theme: Theme }>({
+  getInitialState: ({ injector }) => ({
+    theme: injector.getInstance(ThemeProviderService).theme.getValue(),
+  }),
+  constructed: ({ injector, updateState }) => {
+    const observer = injector.getInstance(ThemeProviderService).theme.subscribe((theme) => {
+      updateState({ theme })
+    })
+    return () => observer.dispose()
+  },
   shadowDomName: 'shade-button',
-  render: ({ props, children }) => {
-    const style = getDefaultStyle(props)
-    const hoverStyle = getHoverStyle(props)
+  render: ({ props, children, getState, injector }) => {
+    const { theme } = getState()
+    const background = getBackground(props, theme)
+    const hoveredBackground = getHoveredBackground(props, theme, () => {
+      const { r, g, b } = injector
+        .getInstance(ThemeProviderService)
+        .getRgbFromColorString((props.color && theme.palette[props.color].main) || theme.text.primary)
+      return `rgba(${r}, ${g}, ${b}, 0.1)`
+    })
+    const border = getBorder(props, theme)
+    const hoveredBorder = getHoveredBorder(props, theme)
+    const textColor = getTextColor(props, theme, () =>
+      injector.getInstance(ThemeProviderService).getTextColor(background),
+    )
+    const hoveredTextColor = getHoveredTextColor(props, theme, () =>
+      injector.getInstance(ThemeProviderService).getTextColor(background),
+    )
+
     return (
       <button
         onmouseenter={(ev) => {
           {
             promisifyAnimation(
               ev.target as any,
-              [{ background: style.background }, { background: hoverStyle.background }],
+              [
+                {
+                  background,
+                  border,
+                  color: textColor,
+                },
+                {
+                  background: hoveredBackground,
+                  border: hoveredBorder,
+                  color: hoveredTextColor,
+                },
+              ],
               { duration: 500, fill: 'forwards', easing: 'cubic-bezier(0.215, 0.610, 0.355, 1.000)' },
             )
           }
@@ -52,7 +115,10 @@ export const Button = Shade<PartialElement<HTMLButtonElement> & ButtonProps>({
         onmouseleave={(ev) => {
           promisifyAnimation(
             ev.target as any,
-            [{ background: hoverStyle.background }, { background: style.background }],
+            [
+              { background: hoveredBackground, border: hoveredBorder, color: hoveredTextColor },
+              { background, border, color: textColor },
+            ],
             {
               duration: 500,
               fill: 'forwards',
@@ -62,8 +128,14 @@ export const Button = Shade<PartialElement<HTMLButtonElement> & ButtonProps>({
         }}
         {...props}
         style={{
-          ...style,
           cursor: props.disabled ? 'inherits' : 'pointer',
+          background,
+          border,
+          margin: '8px',
+          padding: '6px 16px',
+          borderRadius: '4px',
+          textTransform: 'uppercase',
+          color: textColor,
           ...props.style,
         }}>
         {children}
