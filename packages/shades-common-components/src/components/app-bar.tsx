@@ -1,4 +1,5 @@
 import { Shade, createComponent } from '@furystack/shades'
+import { ThemeProviderService } from '../services/theme-provider-service'
 
 export const AppBar = Shade({
   shadowDomName: 'shade-app-bar',
@@ -9,22 +10,23 @@ export const AppBar = Shade({
       container.style.opacity = '1'
     })
   },
-  render: ({ children }) => {
+  render: ({ children, injector }) => {
+    const themeProvider = injector.getInstance(ThemeProviderService)
+    const background = themeProvider.theme.getValue().background.default
     return (
       <div
         style={{
           width: '100%',
-          background: '#222',
-          color: 'white',
+          background,
+          color: themeProvider.theme.getValue().text.secondary,
           display: 'flex',
           justifyContent: 'flex-start',
           alignItems: 'center',
           boxShadow: '0 0 12px rgba(0,0,0,0.6)',
           transition:
             'opacity .35s cubic-bezier(0.550, 0.085, 0.680, 0.530), padding .2s cubic-bezier(0.550, 0.085, 0.680, 0.530)',
-          padding: '2px 8px',
+          padding: '6px 16px',
           opacity: '0',
-          height: '48px',
           overflow: 'hidden',
         }}>
         {children}

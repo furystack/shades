@@ -11,12 +11,9 @@ export const Modal = Shade<{ isVisible: boolean; onClose?: () => void }>({
           width: '100%',
           height: '100%',
           display: 'block',
-          // backgroundColor: 'rgba(128,128,128,0.03)',
           position: 'fixed',
           top: '0',
           left: '0',
-          // animation: 'show 100ms linear',
-          // backdropFilter: 'contrast(0.3)brightness(0.2)blur(5px)',
         }}>
         {children}
       </div>
