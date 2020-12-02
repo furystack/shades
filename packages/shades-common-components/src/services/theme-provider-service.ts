@@ -27,7 +27,7 @@ export interface Text {
   disabled: Color
 }
 
-export interface Button {
+export interface ButtonColor {
   active: Color
   hover: Color
   selected: Color
@@ -43,7 +43,7 @@ export interface Background {
 export interface Theme {
   palette: Palette
   text: Text
-  button: Button
+  button: ButtonColor
   background: Background
   divider: Color
 }

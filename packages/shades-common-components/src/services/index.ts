@@ -1,1 +1,6 @@
 export * from './collection-service'
+export * from './theme-provider-service'
+export * from './default-dark-theme'
+export * from './default-light-theme'
+export * from './default-palette'
+export * from './noty-service'
