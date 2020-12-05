@@ -1,4 +1,5 @@
 import { Shade, createComponent, PartialElement, LocationService } from '@furystack/shades'
+import { ThemeProviderService } from '../services'
 import { promisifyAnimation } from '../utils/promisify-animation'
 
 export interface Tab {
@@ -27,7 +28,9 @@ export const Tabs = Shade<
     }, true)
     return () => locationSubscription.dispose()
   },
-  render: ({ props, getState, updateState }) => {
+  render: ({ props, getState, updateState, injector }) => {
+    const themeProvider = injector.getInstance(ThemeProviderService)
+    const theme = themeProvider.theme.getValue()
     return (
       <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', ...props.containerStyle }}>
         <div
@@ -42,7 +45,8 @@ export const Tabs = Shade<
                   cursor: 'pointer',
                   transition: 'box-shadow 1s linear',
                   fontWeight: isActive ? 'bolder' : 'inherit',
-                  background: isActive ? '#2a2a2a' : '#222',
+                  background: isActive ? theme.background.paper : theme.background.default,
+                  color: isActive ? theme.text.primary : theme.text.secondary,
                 }}
                 onclick={() => {
                   props.onChange && props.onChange(index)

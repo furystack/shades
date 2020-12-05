@@ -2,6 +2,7 @@ import { Shade, createComponent } from '@furystack/shades'
 import { promisifyAnimation } from '../../utils/promisify-animation'
 import { CommandPaletteSuggestionResult } from './command-provider'
 import { CommandPaletteManager } from './command-palette-manager'
+import { ThemeProviderService } from '../../services/theme-provider-service'
 
 export const CommandPaletteSuggestionList = Shade<
   { manager: CommandPaletteManager },
@@ -27,8 +28,8 @@ export const CommandPaletteSuggestionList = Shade<
           await promisifyAnimation(
             container,
             [
-              { opacity: 0, transform: 'translate(0, -50px) rotateX(60deg)' },
-              { opacity: 1, transform: 'translate(0, 0) rotateX(0deg)' },
+              { opacity: 0, transform: 'translate(0, -50px)' },
+              { opacity: 1, transform: 'translate(0, 0)' },
             ],
             { fill: 'forwards', duration: 500 },
           )
@@ -36,8 +37,8 @@ export const CommandPaletteSuggestionList = Shade<
           await promisifyAnimation(
             container,
             [
-              { opacity: 1, transform: 'translate(0, 0) rotateX(0deg)' },
-              { opacity: 0, transform: 'translate(0, -50px) rotateX(60deg)' },
+              { opacity: 1, transform: 'translate(0, 0)' },
+              { opacity: 0, transform: 'translate(0, -50px)' },
             ],
             { fill: 'forwards', duration: 200 },
           )
@@ -70,9 +71,8 @@ export const CommandPaletteSuggestionList = Shade<
           overflow: 'hidden',
           zIndex: '1',
           left: 'auto',
-          backgroundColor: 'rgba(8,8,8,0.85)',
+          backgroundColor: injector.getInstance(ThemeProviderService).theme.getValue().background.paper,
           boxShadow: '3px 3px 5px rgba(0,0,0,0.3)',
-          backdropFilter: 'blur(15px)',
           width: `calc(${Math.round(element.parentElement?.getBoundingClientRect().width || 200)}px - 3em)`,
         }}>
         {getState().suggestions.map((s, i) => (
@@ -84,7 +84,7 @@ export const CommandPaletteSuggestionList = Shade<
             style={{
               padding: '1em',
               cursor: 'default',
-              background: i === manager.selectedIndex.getValue() ? 'rgba(128,128,128,0.2)' : 'rgba(96,96,96,0.2)',
+              background: i === manager.selectedIndex.getValue() ? 'rgba(128,128,128,0.2)' : 'transparent',
             }}>
             {s.element}
           </div>

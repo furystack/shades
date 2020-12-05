@@ -1,4 +1,5 @@
 import { Shade, createComponent } from '@furystack/shades'
+import { ThemeProviderService } from '../../services'
 import { CollectionService, CollectionData } from '../../services/collection-service'
 
 export const dataGridItemsPerPage = [10, 20, 25, 50, 100]
@@ -8,19 +9,31 @@ export const DataGridFooter = Shade<{ service: CollectionService<any> }, { data:
   getInitialState: ({ props }) => ({
     data: props.service.data.getValue(),
   }),
-  constructed: ({ props, updateState }) => {
-    const disposable = props.service.data.subscribe((data) => updateState({ data }))
-    return () => disposable.dispose()
+  constructed: ({ props, updateState, injector, element }) => {
+    const disposables = [
+      props.service.data.subscribe((data) => updateState({ data })),
+
+      injector.getInstance(ThemeProviderService).theme.subscribe((t) => {
+        const el = element.querySelector('div') as HTMLDivElement
+        el.style.color = t.text.secondary
+        el.style.background = t.background.paper
+      }),
+    ]
+
+    return () => disposables.forEach((d) => d.dispose())
   },
-  render: ({ props, getState }) => {
+  render: ({ props, getState, injector }) => {
     const state = getState()
     const currentQuerySettings = props.service.querySettings.getValue()
     const currentPage = Math.ceil(currentQuerySettings.skip || 0) / (currentQuerySettings.top || 1)
+    const theme = injector.getInstance(ThemeProviderService).theme.getValue()
+
     return (
       <div
         className="pager"
         style={{
-          background: '#333',
+          background: theme.background.paper,
+          color: theme.text.secondary,
           position: 'sticky',
           bottom: '0',
           display: 'flex',

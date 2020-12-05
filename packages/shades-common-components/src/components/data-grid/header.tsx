@@ -41,7 +41,7 @@ export const DataGridHeader: <T, K extends keyof T>(
     )
     return () => disposable.dispose()
   },
-  render: ({ getState, props, updateState }) => {
+  render: ({ getState, props, updateState, element }) => {
     const currentState = getState()
     const currentOrder = Object.keys(currentState.querySettings.order || {})[0]
     const currentOrderDirection = Object.values(currentState.querySettings.order || {})[0]
@@ -49,9 +49,13 @@ export const DataGridHeader: <T, K extends keyof T>(
     const filterValue = (props.collectionService.querySettings.getValue().filter as any)?.[props.field]?.$regex || ''
 
     if (currentState.isSearchOpened) {
+      setTimeout(() => {
+        element.querySelector('input')?.focus()
+      }, 1)
       return (
         <Input
           value={filterValue}
+          placeholder={props.field}
           autofocus
           onblur={() => updateState({ isSearchOpened: false })}
           onkeyup={(ev) => currentState.updateSearchValue((ev.target as HTMLInputElement).value)}

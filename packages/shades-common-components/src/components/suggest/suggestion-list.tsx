@@ -27,8 +27,8 @@ export const SuggestionList: <T>(
           await promisifyAnimation(
             container,
             [
-              { opacity: 0, transform: 'translate(0, -50px) rotateX(60deg)' },
-              { opacity: 1, transform: 'translate(0, 0) rotateX(0deg)' },
+              { opacity: 0, transform: 'translate(0, -50px)' },
+              { opacity: 1, transform: 'translate(0, 0)' },
             ],
             { fill: 'forwards', duration: 500 },
           )
@@ -36,8 +36,8 @@ export const SuggestionList: <T>(
           await promisifyAnimation(
             container,
             [
-              { opacity: 1, transform: 'translate(0, 0) rotateX(0deg)' },
-              { opacity: 0, transform: 'translate(0, -50px) rotateX(60deg)' },
+              { opacity: 1, transform: 'translate(0, 0)' },
+              { opacity: 0, transform: 'translate(0, -50px)' },
             ],
             { fill: 'forwards', duration: 200 },
           )

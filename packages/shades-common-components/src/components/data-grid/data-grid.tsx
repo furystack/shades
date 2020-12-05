@@ -5,6 +5,7 @@ import { colors } from '../styles'
 import { DataGridHeader } from './header'
 import { DataGridBody, DataGridBodyState } from './body'
 import { DataGridFooter } from './footer'
+import { ThemeProviderService } from '../../services'
 
 export type DataHeaderCells<T> = {
   [TKey in keyof T | 'default']?: (name: keyof T, state: DataGridState) => JSX.Element
@@ -32,11 +33,21 @@ export const DataGrid: <T>(props: DataGridProps<T>, children: ChildrenList) => J
 >({
   shadowDomName: 'shade-data-grid',
   getInitialState: () => ({}),
-  constructed: ({ props, updateState }) => {
-    const subscriptions = [props.service.error.subscribe((error) => updateState({ error }))]
+  constructed: ({ props, updateState, injector, element }) => {
+    const subscriptions = [
+      props.service.error.subscribe((error) => updateState({ error })),
+      injector.getInstance(ThemeProviderService).theme.subscribe((t) => {
+        const headers = element.querySelectorAll('th')
+        headers.forEach((header) => {
+          header.style.color = t.text.secondary
+          header.style.background = t.background.paper
+        })
+      }),
+    ]
     return () => Promise.all(subscriptions.map((s) => s.dispose()))
   },
-  render: ({ props, getState }) => {
+  render: ({ props, getState, injector }) => {
+    const theme = injector.getInstance(ThemeProviderService).theme.getValue()
     const state = getState()
     if (state.error) {
       return <div style={{ color: colors.error.main }}>{JSON.stringify(state.error)}</div>
@@ -44,7 +55,8 @@ export const DataGrid: <T>(props: DataGridProps<T>, children: ChildrenList) => J
 
     const headerStyle: PartialElement<CSSStyleDeclaration> = {
       padding: '1em 3em',
-      backgroundColor: '#333',
+      backgroundColor: theme.background.paper,
+      color: theme.text.secondary,
       borderRadius: '2px',
       top: '0',
       position: 'sticky',

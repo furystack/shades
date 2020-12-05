@@ -13,6 +13,7 @@ export interface Route<TMatchResult extends object> {
 }
 
 export interface RouterProps {
+  style?: CSSStyleDeclaration
   routes: Array<Route<any>>
   notFound?: (currentUrl: URL) => JSX.Element
 }
