@@ -19,14 +19,24 @@ export const Tabs = Shade<
 >({
   shadowDomName: 'shade-tabs',
   getInitialState: ({ props }) => ({ activeIndex: props.activeTab || 0 }),
-  constructed: ({ injector, updateState }) => {
-    const locationSubscription = injector.getInstance(LocationService).onLocationChanged.subscribe((loc) => {
-      if (loc.hash && loc.hash.startsWith('#tab-')) {
-        const page = parseInt(loc.hash.replace('#tab-', ''), 10)
-        page && updateState({ activeIndex: page })
-      }
-    }, true)
-    return () => locationSubscription.dispose()
+  constructed: ({ injector, updateState, element }) => {
+    const subscriptions = [
+      injector.getInstance(LocationService).onLocationChanged.subscribe((loc) => {
+        if (loc.hash && loc.hash.startsWith('#tab-')) {
+          const page = parseInt(loc.hash.replace('#tab-', ''), 10)
+          page && updateState({ activeIndex: page })
+        }
+      }, true),
+      injector.getInstance(ThemeProviderService).theme.subscribe((t) => {
+        const headers = (element.querySelectorAll('.shade-tabs-headers') as unknown) as HTMLDivElement[]
+        headers.forEach((header) => {
+          const isActive = header.classList.contains('active')
+          header.style.backgroundColor = isActive ? t.background.paper : t.background.default
+          header.style.color = isActive ? t.text.primary : t.text.secondary
+        })
+      }),
+    ]
+    return () => subscriptions.forEach((s) => s.dispose())
   },
   render: ({ props, getState, updateState, injector }) => {
     const themeProvider = injector.getInstance(ThemeProviderService)
@@ -40,6 +50,7 @@ export const Tabs = Shade<
             const isActive = index === getState().activeIndex
             const jsxElement = (
               <div
+                className={`shade-tabs-headers${isActive ? 'active' : ''}`}
                 style={{
                   padding: '1em 2.5em',
                   cursor: 'pointer',

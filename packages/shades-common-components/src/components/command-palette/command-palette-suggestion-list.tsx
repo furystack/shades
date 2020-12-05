@@ -21,6 +21,7 @@ export const CommandPaletteSuggestionList = Shade<
       manager.isOpened.subscribe(async (isOpened) => {
         const container = element.firstElementChild as HTMLDivElement
         if (isOpened) {
+          container.style.display = 'initial'
           container.style.zIndex = '1'
           container.style.width = `calc(${Math.round(
             element.parentElement?.getBoundingClientRect().width || 200,
@@ -43,6 +44,7 @@ export const CommandPaletteSuggestionList = Shade<
             { fill: 'forwards', duration: 200 },
           )
           container.style.zIndex = '-1'
+          container.style.display = 'none'
         }
       }),
       manager.selectedIndex.subscribe((idx) => {

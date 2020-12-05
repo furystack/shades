@@ -5,6 +5,7 @@ import { CommandPaletteManager } from './command-palette-manager'
 import { CommandPaletteInput } from './command-palette-input'
 import { CommandPaletteSuggestionList } from './command-palette-suggestion-list'
 import { CommandProvider } from './command-provider'
+import { ClickAwayService } from '../../services/click-away-service'
 
 export * from './command-palette-input'
 export * from './command-palette-manager'
@@ -30,6 +31,7 @@ export const CommandPalette = Shade<CommandPaletteProps, CommandPaletteState>({
     const { manager } = getState()
     const element = el.querySelector('.input-container') as HTMLDivElement
     manager.element = el
+    manager.clickAwayListener = new ClickAwayService(el, () => manager.isOpened.setValue(false))
     manager.isOpened.subscribe((isOpened) => {
       const suggestions = el.querySelector('.close-suggestions')
       const postControls = el.querySelector('.post-controls')

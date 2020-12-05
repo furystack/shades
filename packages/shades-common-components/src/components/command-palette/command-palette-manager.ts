@@ -1,5 +1,6 @@
 import { Injector, Injectable } from '@furystack/inject'
 import { debounce, ObservableValue } from '@furystack/utils'
+import { ClickAwayService } from '../../services/click-away-service'
 import { CommandProvider, CommandPaletteSuggestionResult } from './command-provider'
 
 @Injectable({ lifetime: 'singleton' })
@@ -21,19 +22,15 @@ export class CommandPaletteManager {
   }).bind(this)
 
   public element?: HTMLElement
-  public clickOutsideListener = ((ev: MouseEvent) => {
-    if (
-      this.element &&
-      this.isOpened.getValue() &&
-      (ev.target as HTMLElement).closest(this.element.tagName) !== this.element
-    ) {
-      this.isOpened.setValue(false)
-    }
-  }).bind(this)
 
   public dispose() {
     window.removeEventListener('keyup', this.keyPressListener)
-    window.removeEventListener('click', this.clickOutsideListener)
+    this.isOpened.dispose()
+    this.isLoading.dispose()
+    this.term.dispose()
+    this.selectedIndex.dispose()
+    this.currentSuggestions.dispose()
+    this.clickAwayListener?.dispose()
   }
 
   public selectSuggestion(injector: Injector, index: number = this.selectedIndex.getValue()) {
@@ -65,8 +62,9 @@ export class CommandPaletteManager {
     }
   }, 250)
 
+  public clickAwayListener?: ClickAwayService<any>
+
   constructor(private readonly commandProviders: CommandProvider[]) {
     window.addEventListener('keyup', this.keyPressListener, true)
-    window.addEventListener('click', this.clickOutsideListener, true)
   }
 }
