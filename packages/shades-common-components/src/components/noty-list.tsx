@@ -69,6 +69,7 @@ export const NotyComponent = Shade<{ model: NotyModel; onDismiss: () => void }>(
 
     return (
       <div
+        className={`noty ${props.model.type}`}
         style={{
           width: '300px',
           display: 'flex',
@@ -99,7 +100,9 @@ export const NotyComponent = Shade<{ model: NotyModel; onDismiss: () => void }>(
             title={props.model.title}>
             {props.model.title}
           </h5>
-          <Button onclick={removeSelf}>✖</Button>
+          <Button className="dismissNoty" onclick={removeSelf}>
+            ✖
+          </Button>
         </div>
         <div style={{ padding: '6px 16px' }}>{props.model.body}</div>
       </div>
