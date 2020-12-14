@@ -29,14 +29,14 @@
   },
   "homepage": "https://github.com/furystack/furystack",
   "devDependencies": {
-    "@types/jest": "^26.0.18",
+    "@types/jest": "^26.0.19",
     "@types/uuid": "^8.3.0"
   },
   "dependencies": {
-    "@furystack/core": "^9.1.15",
-    "@furystack/inject": "^4.0.43",
-    "@furystack/logging": "^2.0.50",
-    "@furystack/utils": "^1.2.13",
+    "@furystack/core": "^9.1.16",
+    "@furystack/inject": "^4.0.44",
+    "@furystack/logging": "^2.0.51",
+    "@furystack/utils": "^1.2.14",
     "path-to-regexp": "^6.2.0",
     "tslib": "^2.0.3",
     "uuid": "^8.3.2"
