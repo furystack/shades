@@ -1,4 +1,4 @@
-import { Shade, createComponent, PartialElement, LocationService } from '@furystack/shades'
+import { Shade, createComponent, LocationService } from '@furystack/shades'
 import { ThemeProviderService } from '../services'
 import { promisifyAnimation } from '../utils/promisify-animation'
 
@@ -10,8 +10,8 @@ export interface Tab {
 export const Tabs = Shade<
   {
     tabs: Tab[]
-    containerStyle?: PartialElement<CSSStyleDeclaration>
-    style?: PartialElement<CSSStyleDeclaration>
+    containerStyle?: Partial<CSSStyleDeclaration>
+    style?: Partial<CSSStyleDeclaration>
     activeTab?: number
     onChange?: (page: number) => void
   },

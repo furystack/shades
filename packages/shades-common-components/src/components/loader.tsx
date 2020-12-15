@@ -1,6 +1,6 @@
-import { Shade, createComponent, PartialElement } from '@furystack/shades'
+import { Shade, createComponent } from '@furystack/shades'
 
-export const Loader = Shade<{ style?: PartialElement<CSSStyleDeclaration> }>({
+export const Loader = Shade<{ style?: Partial<CSSStyleDeclaration> }>({
   shadowDomName: 'shade-loader',
   render: ({ props }) => {
     return (

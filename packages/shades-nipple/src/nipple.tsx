@@ -1,9 +1,9 @@
-import { Shade, createComponent, PartialElement } from '@furystack/shades'
+import { Shade, createComponent } from '@furystack/shades'
 import { create, JoystickManagerOptions, EventData, JoystickOutputData } from 'nipplejs'
 
 export interface NippleComponentProps {
   managerOptions: JoystickManagerOptions
-  style?: PartialElement<CSSStyleDeclaration>
+  style?: Partial<CSSStyleDeclaration>
   onStart?: (evt: EventData, data: JoystickOutputData) => void
   onEnd?: (evt: EventData, data: JoystickOutputData) => void
   onDir?: (evt: EventData, data: JoystickOutputData) => void

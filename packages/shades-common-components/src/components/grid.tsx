@@ -1,4 +1,4 @@
-import { Shade, createComponent, ChildrenList, PartialElement } from '@furystack/shades'
+import { Shade, createComponent, ChildrenList } from '@furystack/shades'
 import { ThemeProviderService } from '../services'
 
 // ToDo: https://stackoverflow.com/questions/51459971/type-of-generic-stateless-component-react-or-extending-generic-function-interfa
@@ -9,9 +9,9 @@ export interface GridProps<T> {
   headerComponents?: HeaderCells<T>
   rowComponents?: RowCells<T>
   styles?: {
-    wrapper?: PartialElement<CSSStyleDeclaration>
-    header?: PartialElement<CSSStyleDeclaration>
-    cell?: PartialElement<CSSStyleDeclaration>
+    wrapper?: Partial<CSSStyleDeclaration>
+    header?: Partial<CSSStyleDeclaration>
+    cell?: Partial<CSSStyleDeclaration>
   }
 }
 
@@ -36,7 +36,7 @@ export const Grid: <T>(props: GridProps<T>, children: ChildrenList) => JSX.Eleme
   },
   render: ({ props, injector }) => {
     const theme = injector.getInstance(ThemeProviderService).theme.getValue()
-    const headerStyle: PartialElement<CSSStyleDeclaration> = {
+    const headerStyle: Partial<CSSStyleDeclaration> = {
       padding: '0 0.51em',
       backgroundColor: theme.background.paper,
       color: theme.text.secondary,

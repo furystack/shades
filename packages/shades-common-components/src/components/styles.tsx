@@ -1,12 +1,10 @@
-import { PartialElement } from '@furystack/shades'
-
 declare global {
   interface CSSStyleDeclaration {
     backdropFilter: string
   }
 }
 
-const glassBox: PartialElement<CSSStyleDeclaration> = {
+const glassBox: Partial<CSSStyleDeclaration> = {
   backdropFilter: 'blur(4px)',
   borderRadius: '5px',
   border: '1px solid rgba(128,128,128,.3)',

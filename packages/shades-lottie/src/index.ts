@@ -1,4 +1,3 @@
-import { PartialElement } from '@furystack/shades'
 import '@lottiefiles/lottie-player'
 
 declare global {
@@ -17,7 +16,7 @@ declare global {
         mode?: string
         renderer?: 'svg' | 'canvas'
         speed?: number
-        style?: PartialElement<CSSStyleDeclaration>
+        style?: Partial<CSSStyleDeclaration>
       }
     }
   }

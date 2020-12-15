@@ -1,4 +1,4 @@
-import { Shade, createComponent, PartialElement } from '@furystack/shades'
+import { Shade, createComponent } from '@furystack/shades'
 import { promisifyAnimation } from '../../utils/promisify-animation'
 import { Loader } from '../loader'
 import { CommandPaletteManager } from './command-palette-manager'
@@ -15,7 +15,7 @@ export * from './command-provider'
 export interface CommandPaletteProps {
   commandProviders: CommandProvider[]
   defaultPrefix: string
-  style?: PartialElement<CSSStyleDeclaration>
+  style?: Partial<CSSStyleDeclaration>
 }
 
 export interface CommandPaletteState {
