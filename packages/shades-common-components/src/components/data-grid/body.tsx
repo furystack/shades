@@ -1,5 +1,5 @@
 import { CollectionService } from '../../services/collection-service'
-import { ChildrenList, Shade, createComponent, PartialElement } from '@furystack/shades'
+import { ChildrenList, Shade, createComponent } from '@furystack/shades'
 import { DataRowCells } from './data-grid'
 
 export interface DataGridBodyProps<T> {
@@ -7,7 +7,7 @@ export interface DataGridBodyProps<T> {
   onDoubleClick?: (entry: T) => void
   columns: Array<keyof T>
   rowComponents?: DataRowCells<T>
-  style?: PartialElement<CSSStyleDeclaration>
+  style?: Partial<CSSStyleDeclaration>
 }
 
 export interface DataGridBodyState<T> {

@@ -1,3 +1,1 @@
-export type PartialElement<T> = {
-  [K in keyof T]?: T[K] extends ((...args: any[]) => any) | null | undefined ? T[K] : PartialElement<T[K]>
-}
+export type PartialElement<T> = Omit<Partial<T>, 'style'> & { style?: Partial<CSSStyleDeclaration> }

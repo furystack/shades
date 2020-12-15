@@ -1,4 +1,4 @@
-import { Shade, createComponent, PartialElement, ChildrenList } from '@furystack/shades'
+import { Shade, createComponent, ChildrenList } from '@furystack/shades'
 import { promisifyAnimation } from '../../utils/promisify-animation'
 import { Loader } from '../loader'
 import { SuggestManager } from './suggest-manager'
@@ -16,7 +16,7 @@ export interface SuggestProps<T> {
   getEntries: (term: string) => Promise<T[]>
   getSuggestionEntry: (entry: T) => SuggestionResult
   onSelectSuggestion: (entry: T) => void
-  style?: PartialElement<CSSStyleDeclaration>
+  style?: Partial<CSSStyleDeclaration>
 }
 
 export interface SuggestState<T> {

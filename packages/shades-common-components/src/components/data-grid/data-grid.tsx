@@ -1,4 +1,4 @@
-import { ChildrenList, createComponent, Shade, PartialElement } from '@furystack/shades'
+import { ChildrenList, createComponent, Shade } from '@furystack/shades'
 import { CollectionService } from '../../services/collection-service'
 import { GridProps } from '../grid'
 import { colors } from '../styles'
@@ -53,7 +53,7 @@ export const DataGrid: <T>(props: DataGridProps<T>, children: ChildrenList) => J
       return <div style={{ color: colors.error.main }}>{JSON.stringify(state.error)}</div>
     }
 
-    const headerStyle: PartialElement<CSSStyleDeclaration> = {
+    const headerStyle: Partial<CSSStyleDeclaration> = {
       padding: '1em 3em',
       backgroundColor: theme.background.paper,
       color: theme.text.secondary,
