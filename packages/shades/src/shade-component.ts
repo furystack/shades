@@ -1,4 +1,4 @@
-import { ChildrenList, ShadeComponent, isShadeComponent, PartialElement } from './models'
+import { ChildrenList, ShadeComponent, isShadeComponent } from './models'
 
 /**
  * Appends a list of items to a HTML element
@@ -20,7 +20,7 @@ export const appendChild = (el: HTMLElement, children: ChildrenList) => {
   }
 }
 
-export const hasStyle = (props: any): props is { style: PartialElement<CSSStyleDeclaration> } => {
+export const hasStyle = (props: any): props is { style: Partial<CSSStyleDeclaration> } => {
   return props?.style !== undefined
 }
 
